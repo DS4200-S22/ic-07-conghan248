@@ -131,53 +131,11 @@ const svg2 = d3
   .attr("height", height - margin.top - margin.bottom)
   .attr("viewBox", [0, 0, width, height]);
 
-// load the database into js
-d3.csv("data/barchart.csv").then((data2) => {
-
-  console.log(data2); 
-
-  svg2.selectAll("bar")
-      .data(data2)
-      .enter()
-      .append("bar")
-        .attr("x", (d) => { return d.x; })
-        .attr("y", (d) => { return d.y; })
-        .attr("fill", (d) => { return d.color; }); 
-
-  // find max Y1 from data1
-  let maxY2 = d3.max(data2, function(d) { return d.score; });
-
-  
-});
-
-// map  data values (domain for the scale function) to our pixel values (range for the scale function) 
-let yScale2 = d3.scaleLinear()
-.domain([0,maxY2])
-.range([height-margin.bottom,margin.top]); 
-
-// map  data values (domain for the scale function) to our pixel values (range for the scale function) 
-let xScale2 = d3.scaleBand()
-.domain(d3.range(data2.length))
-.range([margin.left, width - margin.right])
-.padding(0.1); 
-
-// Add y axis to svg1 
-svg2.append("g")
-   .attr("transform", `translate(${margin.left}, 0)`) 
-   .call(d3.axisLeft(yScale2)) 
-   .attr("font-size", '20px'); 
-
-// Add x axis to svg1 
-svg2.append("g")
-    .attr("transform", `translate(0,${height - margin.bottom})`) 
-    .call(d3.axisBottom(xScale1) 
-            .tickFormat(i => data2[i].name))  
-    .attr("font-size", '20px'); 
 
 //setup the hard-coded-bar to become hover using opacity
 const tooltip2 = d3.select("#csv-bar") 
                 .append("div") 
-                .attr('id', "tooltip1") 
+                .attr('id', "tooltip2") 
                 .style("opacity", 0) 
                 .attr("class", "tooltip"); 
 
@@ -198,16 +156,52 @@ const mouseleave2 = function(event, d) {
   tooltip2.style("opacity", 0);
 }
 
+
+// load the database into js
+d3.csv("data/barchart.csv").then((data2) => {
+
+  // find max Y2 from data1
+  let maxY2 = d3.max(data2, function(d) { return d.score;});
+
+  let yScale2 = d3.scaleLinear()
+                  .domain([0,maxY2])
+                  .range([height-margin.bottom,margin.top]); 
+
+  // map  data values (domain for the scale function) to our pixel values (range for the scale function) 
+  let xScale2 = d3.scaleBand()
+                  .domain(d3.range(data2.length))
+                 .range([margin.left, width - margin.right])
+                  .padding(0.1);
+  
+  // Add y axis to svg1 
+  svg2.append("g")
+      .attr("transform", `translate(${margin.left}, 0)`) 
+      .call(d3.axisLeft(yScale2)) 
+       .attr("font-size", '20px'); 
+
+// Add x axis to svg1 
+svg2.append("g")
+    .attr("transform", `translate(0,${height - margin.bottom})`) 
+    .call(d3.axisBottom(xScale2) 
+            .tickFormat(i => data2[i].name))  
+    .attr("font-size", '20px'); 
+
 // add event lisenter
 svg2.selectAll(".bar") 
-   .data(data1) 
+   .data(data2) 
    .enter()  
    .append("rect") 
      .attr("class", "bar") 
-     .attr("x", (d,i) => xScale1(i)) 
-     .attr("y", (d) => yScale1(d.score)) 
-     .attr("height", (d) => (height - margin.bottom) - yScale1(d.score)) 
-     .attr("width", xScale1.bandwidth()) 
+     .attr("x", (d,i) => xScale2(i)) 
+     .attr("y", (d) => yScale2(d.score)) 
+     .attr("height", (d) => (height - margin.bottom) - yScale2(d.score)) 
+     .attr("width", xScale2.bandwidth()) 
      .on("mouseover", mouseover2) 
      .on("mousemove", mousemove2)
      .on("mouseleave", mouseleave2);
+  
+});
+
+
+
+
