@@ -25,7 +25,7 @@ const tooltip3 = d3.select("body")
 
 // mouseover1 event handler
 const mouseover3 = function(event, d) {
-  tooltip3.html("day " + d.day + "<br> Score: " + d.score + "<br>") 
+  tooltip3.html("Day:" + d.day + "<br> Score: " + d.score + "<br>") 
           .style("opacity", 1);  
 }
 
