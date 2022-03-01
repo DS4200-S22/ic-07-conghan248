@@ -17,7 +17,7 @@ const svg3 = d3
 .attr("viewBox", [0, 0, width, height]);
 
 //setup the hard-coded-bar to become hover using opacity
-const tooltip3 = d3.select("#csv-scatter") 
+const tooltip3 = d3.select("body") 
                 .append("div") 
                 .attr('id', "tooltip3") 
                 .style("opacity", 0) 
@@ -25,7 +25,7 @@ const tooltip3 = d3.select("#csv-scatter")
 
 // mouseover1 event handler
 const mouseover3 = function(event, d) {
-  tooltip3.html("Name: " + d.name + "<br> Score: " + d.score + "<br>") 
+  tooltip3.html("day " + d.day + "<br> Score: " + d.score + "<br>") 
           .style("opacity", 1);  
 }
 
@@ -69,15 +69,14 @@ d3.csv("data/scatter.csv").then((data3) => {
       .attr("font-size", '20px'); 
   
   // add event lisenter
-  svg3.selectAll(".circle") 
+  svg3.selectAll(".point") 
       .data(data3) 
       .enter()  
       .append("circle") 
-       .attr("class", "bar") 
-       .attr("x", (d,i) => xScale3(i)) 
-       .attr("y", (d) => yScale3(d.score)) 
-       .attr("height", (d) => xScale3(d.day))
-       .attr("width", xScale3.bandwidth()) 
+        .attr("class", "point") 
+        .attr("cx", (d) => xScale3(d.day)) 
+        .attr("cy", (d) => yScale3(d.score)) 
+        .attr("r", 10) 
        .on("mouseover", mouseover3) 
        .on("mousemove", mousemove3)
        .on("mouseleave", mouseleave3);
